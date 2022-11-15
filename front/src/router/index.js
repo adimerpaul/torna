@@ -29,7 +29,7 @@ export default route(function (/* { store, ssrContext } */) {
     // console.log(store().getters['showcase/isLoggedIn'])
     if(to.matched.some(record => record.meta.requiresAuth)) {
       // if (store().getters['login/isLoggedIn']) {
-      if (useCounterStore().isLoggedIn) {
+      if (useCounterStore().isLogged) {
         next()
         return
       }

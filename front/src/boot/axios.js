@@ -34,6 +34,7 @@ export default boot(({ app, router }) => {
       })
     })
   }else{
+    router.push('/login')
     useCounterStore().isLogged=false
   }
   app.config.globalProperties.$api = api
