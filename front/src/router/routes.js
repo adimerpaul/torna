@@ -9,11 +9,11 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/IndexPage.vue') },
-      { path: 'empresa', component: Empresa },
-      { path: 'contratista', component: Contratista },
-      { path: 'transporte', component: Transporte },
-      { path: 'tornaguia', component: Tornaguia },
+      { path: '', component: () => import('pages/IndexPage.vue') ,meta:{requiresAuth: true}},
+      { path: 'empresa', component: Empresa ,meta:{requiresAuth: true}},
+      { path: 'contratista', component: Contratista ,meta:{requiresAuth: true}},
+      { path: 'transporte', component: Transporte ,meta:{requiresAuth: true}},
+      { path: 'tornaguia', component: Tornaguia ,meta:{requiresAuth: true}},
     ]
   },
   {
