@@ -195,7 +195,7 @@ export default {
           this.store.negocio={}
           this.store.userChat={}
           localStorage.removeItem('tokenJor')
-          this.store.isLoggedIn=false
+          this.store.isLogged=false
           this.$router.push('/login')
           this.$q.loading.hide()
         })
