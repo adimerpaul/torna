@@ -73,7 +73,7 @@ export default {
     }
   },
   mounted() {
-    if (this.store.isLoggedIn){
+    if (this.store.isLogged){
       this.$router.push('/')
     }
   },
@@ -95,7 +95,7 @@ export default {
     //         })
     //         this.$router.push('/')
     //         this.store.user=res.data.user
-    //         this.store.isLoggedIn=true
+    //         this.store.isLogged=true
     //         this.$api.defaults.headers.common['Authorization'] = 'Bearer '+res.data.token
     //         localStorage.setItem('tokenTor',res.data.token)
     //       }).catch(err => {
@@ -126,7 +126,7 @@ export default {
         })
         this.$router.push('/')
         this.store.user=res.data.user
-        this.store.isLoggedIn=true
+        this.store.isLogged=true
         this.$api.defaults.headers.common['Authorization'] = 'Bearer '+res.data.token
         localStorage.setItem('tokenTor',res.data.token)
       }).catch(error => {
