@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('marca')->nullable();
             $table->string('placa')->nullable();
             $table->string('color')->nullable();
-            $table->string('estado')->nullable()->default('activo');
+            $table->string('estado')->nullable()->default('Activo');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
