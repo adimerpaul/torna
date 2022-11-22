@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ContratistaSeeder::class,
             EmpresaSeeder::class,
             TransporteSeeder::class,
+            DriverSeeder::class,
         ]);
     }
 }

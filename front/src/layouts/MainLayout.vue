@@ -146,6 +146,22 @@
                 Empresa
               </q-item-section>
             </q-item>
+            <q-item clickable exact to="driver" active-class="bg-blue-grey-6 text-white">
+              <q-item-section avatar>
+                <q-icon name="o_legend_toggle" />
+              </q-item-section>
+              <q-item-section>
+                Conductores
+              </q-item-section>
+            </q-item>
+            <q-item v-if="store.user.id==1" clickable exact to="user" active-class="bg-blue-grey-6 text-white">
+              <q-item-section avatar>
+                <q-icon name="o_people" />
+              </q-item-section>
+              <q-item-section>
+                Usuarios
+              </q-item-section>
+            </q-item>
           </q-list>
           <q-separator />
         </q-list>

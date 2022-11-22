@@ -8,7 +8,7 @@ use App\Http\Requests\UpdateTransporteRequest;
 use Illuminate\Http\Request;
 
 class TransporteController extends Controller{
-    public function index(){ return Transporte::all(); }
+    public function index(){ return Transporte::orderBy('placa')->get(); }
     public function show(Transporte $transporte){ return $transporte; }
     public function store(Request $request){ return Transporte::create($request->all()); }
     public function update(Request $request, Transporte $transporte){ $transporte->update($request->all()); return $transporte; }

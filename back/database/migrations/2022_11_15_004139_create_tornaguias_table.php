@@ -15,13 +15,15 @@ return new class extends Migration
     {
         Schema::create('tornaguias', function (Blueprint $table) {
             $table->id();
+            $table->date('fecha');
+            $table->string('numero');
             $table->string('yacimiento');
-            $table->string('destino');
-            $table->string('contratista');
-            $table->integer('cantidad');
+            $table->string('tranca');
+            $table->string('cuadrilla');
+            $table->string('tipoMaterial');
             $table->string('minerales');
-            $table->string('tipoManterial');
-            $table->string('autorizado');
+            $table->integer('peso');
+            $table->integer('sacos');
             $table->unsignedBigInteger('transporte_id');
             $table->foreign('transporte_id')->references('id')->on('transportes');
             $table->unsignedBigInteger('empresa_id');
@@ -30,6 +32,8 @@ return new class extends Migration
             $table->foreign('contratista_id')->references('id')->on('contratistas');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('driver_id');
+            $table->foreign('driver_id')->references('id')->on('drivers');
             $table->timestamps();
         });
     }

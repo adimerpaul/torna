@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ContratistaController extends Controller
 {
-    public function index(){ return Contratista::all(); }
+    public function index(){ return Contratista::orderBy('nombre')->get(); }
     public function show(Contratista $contratista){ return $contratista; }
     public function store(Request $request){ return Contratista::create($request->all()); }
     public function update(Request $request, $id){
