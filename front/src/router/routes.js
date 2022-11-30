@@ -22,7 +22,7 @@ const routes = [
 
     ]
   },
-  { path: '/show/:id', component:Show,meta:{requiresAuth: true}},
+  { path: '/show/:id', component:Show},
   {
     path: '/login',
     component: Login,
