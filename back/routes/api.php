@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 //});
 Route::post('/login', [App\Http\Controllers\UserController::class, 'login']);
 //Route::post('/register', [App\Http\Controllers\UserController::class, 'register']);
+Route::apiResource('tornaguia', App\Http\Controllers\TornaguiaController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [App\Http\Controllers\UserController::class, 'logout']);
     Route::post('/me', [App\Http\Controllers\UserController::class, 'me']);
@@ -27,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('transporte', App\Http\Controllers\TransporteController::class);
     Route::apiResource('contratista', App\Http\Controllers\ContratistaController::class);
     Route::apiResource('empresa', App\Http\Controllers\EmpresaController::class);
-    Route::apiResource('tornaguia', App\Http\Controllers\TornaguiaController::class);
+//    Route::apiResource('tornaguia', App\Http\Controllers\TornaguiaController::class);
     Route::post('tornaguiaSearch', [App\Http\Controllers\TornaguiaController::class,'tornaguiaSearch']);
     Route::apiResource('driver', App\Http\Controllers\DriverController::class);
     Route::apiResource('user', App\Http\Controllers\UserController::class);

@@ -67,7 +67,7 @@
         </q-td>
       </template>
     </q-table>
-    <pre>{{tornaguias}}</pre>
+<!--    <pre>{{tornaguias}}</pre>-->
     <q-dialog v-model="showAddTornaguiaDialog" full-width >
       <q-card>
         <q-card-section class="row items-center q-pb-none">
