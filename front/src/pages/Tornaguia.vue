@@ -1,9 +1,25 @@
 <template>
   <q-page>
+    <q-card>
+      <q-card-section>
+        <div class="row">
+          <div class="col-12 col-sm-4">
+            <q-input  outlined dense type="date" v-model="fecha1" label="Fecha Desde" />
+          </div>
+          <div class="col-12 col-sm-4">
+            <q-input  outlined dense type="date" v-model="fecha2" label="Fecha Hasta"/>
+          </div>
+          <div class="col-12 col-sm-4 flex flex-center">
+            <q-btn icon="search" color="primary" label="Buscar" @click="buscar" />
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
     <q-table :rows="tornaguias" :columns="tornaguiaColums" :filter="search">
       <template v-slot:top-right>
         <q-toolbar>
-          <q-btn color="primary" label="Crear tornagia" icon="add_circle_outline" @click="tornaguiaClick" />
+          <q-btn color="green" :label="$q.screen.lt.md?'':'Descargar excel'" icon="download" @click="tornaguiaDownload" />
+          <q-btn color="primary" :label="$q.screen.lt.md?'':'Crear tornagia'" icon="add_circle_outline" @click="tornaguiaClick" />
           <q-input v-model="search"  outlined  dense placeholder="Buscar..." />
         </q-toolbar>
       </template>
@@ -14,25 +30,44 @@
       </template>
       <template v-slot:body-cell-option="props">
         <q-td :props="props" auto-width >
-          <q-btn-dropdown color="primary" label="Opciones">
+          <q-btn-dropdown color="primary" label="Opciones" no-caps>
             <q-list>
               <q-item clickable v-close-popup @click="ver(props.row)" >
                 <q-item-section avatar>
-                  <q-icon name="edit" />
+                  <q-icon name="o_edit" />
                 </q-item-section>
                 <q-item-section>Modificar</q-item-section>
               </q-item>
-              <q-item clickable v-close-popup @click="print(props.row)" >
+              <q-item clickable v-close-popup @click="print(props.row,'todo')" >
                 <q-item-section avatar>
-                  <q-icon name="print" />
+                  <q-icon name="o_print" />
                 </q-item-section>
-                <q-item-section>Imprimir</q-item-section>
+                <q-item-section>Imprimir Todo</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="print(props.row,'nada')" >
+                <q-item-section avatar>
+                  <q-icon name="o_print" />
+                </q-item-section>
+                <q-item-section>Imprimir sin nada</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="print(props.row,'fondo')" >
+                <q-item-section avatar>
+                  <q-icon name="o_print" />
+                </q-item-section>
+                <q-item-section>Imprimir con fondo</q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup  :to="'/show/'+props.row.id">
+                <q-item-section avatar>
+                  <q-icon name="o_visibility" />
+                </q-item-section>
+                <q-item-section>Ver</q-item-section>
               </q-item>
             </q-list>
           </q-btn-dropdown>
         </q-td>
       </template>
     </q-table>
+    <pre>{{tornaguias}}</pre>
     <q-dialog v-model="showAddTornaguiaDialog" full-width >
       <q-card>
         <q-card-section class="row items-center q-pb-none">
@@ -151,6 +186,7 @@ import {date} from "quasar";
 import {useCounterStore} from "stores/example-store";
 import { Printd } from 'printd'
 import QRCode from 'qrcode'
+import xlsx from "json-as-xlsx"
 
 export default {
   name: `Tornaguia`,
@@ -172,6 +208,8 @@ export default {
         fecha:date.formatDate(new Date(), 'YYYY-MM-DD'),
         mineralesSel:[],
       },
+      fecha1:date.formatDate(new Date(), 'YYYY-MM-DD'),
+      fecha2:date.formatDate(new Date(), 'YYYY-MM-DD'),
       loading: false,
       tornaguiaCrear: true,
       empresas:[],
@@ -180,7 +218,7 @@ export default {
       drivers:[],
       tornaguiaColums:[
         {name: 'option', field: 'option', label: 'Opciones', align: 'left', sortable: true},
-        {name: 'id', field: 'id', label: 'No.', align: 'left', sortable: true},
+        {name: 'numero', field: 'numero', label: 'No.', align: 'left', sortable: true},
         {name: 'fecha', field: 'fecha', label: 'Fecha', align: 'left', sortable: true},
         {name: 'empresa', label: 'Empresa destino', field: row=>row.empresa.nombre, align: 'left', sortable: true},
         {name: 'contratista', label: 'Contratista', field: row=>row.contratista.nombre, align: 'left', sortable: true},
@@ -216,11 +254,27 @@ export default {
     });
   },
   methods:{
-    print(tornaguia){
-      tornaguia.id=tornaguia.id.toString().padStart(6, '0')
+    print(tornaguia,tipo){
+      tornaguia.numero=tornaguia.numero.toString().padStart(6, '0')
+      let fondo=''
+
+      if (tipo=='fondo'){
+        tipo='nada'
+        fondo='fondo'
+      }
+      console.log(fondo)
       const d = new Printd()
-      QRCode.toDataURL(tornaguia.id+'-'+tornaguia.driver.name)
-        .then(url => {
+      var opts = {
+        errorCorrectionLevel: 'H',
+        type: 'image/jpeg',
+        // quality: 0.3,
+        margin: 1,
+        // color: {
+        //   dark:"#010599FF",
+        //   light:"#FFBF60FF"
+        // }
+      }
+      QRCode.toDataURL( process.env.API_FRONT+'show/'+tornaguia.id,opts).then(url => {
           document.getElementById('myelement').innerHTML = `
 <style>
   .center {
@@ -244,7 +298,7 @@ export default {
   .width-50{
     width: 50%;
   }
-    .width-25{
+   .width-25{
     width: 25%;
   }
 
@@ -275,9 +329,30 @@ export default {
   .background-black{
     background-color: #639F93;
   }
-
+  .collapse{
+    border-collapse: collapse;
+  }
+  .hide{
+    visibility: hidden;
+  }
+  .show{
+    visibility: visible;
+  }
+  .right{
+    text-align: right;
+  }
+  .absolute{
+    position: absolute;
+    top: 0px;
+    z-index: -1;
+    width: 700px;
+  }
+  .padding-right{
+    padding-right: 20px;
+  }
 </style>
-<table class="border" style="border-collapse: collapse" width="100%">
+<img class="absolute ${fondo=='fondo'?'show':'hide'}" src="fondo.png" alt="imagen" >
+<table class="border collapse width-100 ${tipo=='nada'?'hide':'show'}">
   <tr>
     <td class="center border"><img src="logo1.png" alt="logo1" width="50px"></td>
     <td class="center border color ">
@@ -286,7 +361,7 @@ export default {
     <div class="h5">Cel. 72318861-71852849-72467605-71101685</div>
     <div class="h5">Poopo-Oruro-Bolivia</div>
     </td>
-    <td class="center border"><img src="logo.png" alt="logo1" width="50px"></td>
+    <td class="center border"><img src="logo2.png" alt="logo1" width="50px"></td>
   </tr>
   <tr>
     <td class="center border" colspan="3">
@@ -294,78 +369,78 @@ export default {
     </td>
 </tr>
 </table>
-<table class="width-100">
+<table class="width-100" >
   <tr>
-    <td class="border width-50">
-      <small class="bold h4 color">Fecha:</small><small class="black"> ${tornaguia.fecha} </small>
+    <td class="${tipo=='nada'?'':'border'} width-50">
+      <small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Fecha:</small><small class="black"> ${tornaguia.fecha} </small>
     </td>
-    <td class="border width-50">
-      <small class="bold h4 color">No:</small><small class="red"> ${tornaguia.id}</small>
+    <td class="${tipo=='nada'?'':'border'} width-50" >
+      <div  style="display: flex; justify-content: space-between"><span class="bold h4 color ${tipo=='nada'?'hide':'show'}">No:</span> <div class="red bold padding-right">${tornaguia.numero}</div></div>
     </td>
    </tr>
    <tr>
-    <td class="border center white background-black">
+    <td class="${tipo=='nada'?'':'border'} center white background-black ${tipo=='nada'?'hide':'show'}">
       PROCEDENCIA
     </td>
-    <td class="border center white background-black">
+    <td class="${tipo=='nada'?'':'border'} center white background-black ${tipo=='nada'?'hide':'show'}">
       PROPIETARIO DEL MINERAL
     </td>
 </tr>
   <tr>
-    <td class="border width-50">
-      <div><small class="bold h4 color">Departamento:</small><small class="color"> Oruro Minicipio: Poopo </small></div>
-      <div><small class="bold h4 color">Yacimiento:</small><small class="black"> ${tornaguia.yacimiento}</small></div>
-      <div><small class="bold h4 color">Cuadrilla:</small><small class="black"> ${tornaguia.cuadrilla}</small></div>
-      <div><small class="bold h4 color">Tranca de control:</small><small class="black"> ${tornaguia.tranca}</small></div>
+    <td class="${tipo=='nada'?'':'border'} width-50">
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Departamento:</small><small class="color ${tipo=='nada'?'hide':'show'}"> Oruro Minicipio: Poopo </small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Yacimiento:</small><small class="black"> ${tornaguia.yacimiento}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Cuadrilla:</small><small class="black"> ${tornaguia.cuadrilla}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Tranca de control:</small><small class="black"> ${tornaguia.tranca}</small></div>
     </td>
-    <td class="border width-50">
-      <div><small class="bold h4 color">Cooperativa Minera Poopo R.L.:</small></div>
-      <div><small class="bold h4 color">Destino Empresa:</small><small class="black"> ${tornaguia.empresa.nombre}</small></div>
-      <div><small class="bold h4 color">Contratista:</small><small class="black"> ${tornaguia.contratista.nombre}</small></div>
+    <td class="${tipo=='nada'?'':'border'} width-50">
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Cooperativa Minera Poopo R.L.:</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Destino Empresa:</small><small class="black"> ${tornaguia.empresa.nombre}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Contratista:</small><small class="black"> ${tornaguia.contratista.nombre}</small></div>
     </td>
    </tr>
       <tr>
-    <td class="border center white background-black">
+    <td class="${tipo=='nada'?'':'border'} center white background-black ${tipo=='nada'?'hide':'show'}">
       MEDIO DE TRANSPORTE
     </td>
-    <td class="border center white background-black">
+    <td class="${tipo=='nada'?'':'border'} center white background-black ${tipo=='nada'?'hide':'show'}">
     TIPO DE MATERIAL
     </td>
 </tr>
   <tr>
-    <td class="border width-50">
-      <div><small class="bold h4 color">Tipo de transporte:</small><small class="black"> ${tornaguia.transporte.tipo} </small> <small class="bold h4 color">Marca:</small><small class="black"> ${tornaguia.transporte.marca} </small></div>
-      <div><small class="bold h4 color">Color:</small><small class="black"> ${tornaguia.transporte.color}</small><small class="bold h4 color">Placa:</small><small class="black"> ${tornaguia.transporte.placa}</small></div>
-      <div><small class="bold h4 color">Nombre del chofer:</small><small class="black"> ${tornaguia.driver.name}</small></div>
-      <div><small class="bold h4 color">Ci :</small><small class="black"> ${tornaguia.driver.licencia}</small></div>
+    <td class="${tipo=='nada'?'':'border'} width-50">
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Tipo de transporte:</small><small class="black"> ${tornaguia.transporte.tipo} </small> <small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Marca:</small><small class="black"> ${tornaguia.transporte.marca} </small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Color:</small><small class="black"> ${tornaguia.transporte.color}</small><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Placa:</small><small class="black"> ${tornaguia.transporte.placa}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Nombre del chofer:</small><small class="black"> ${tornaguia.driver.name}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Ci :</small><small class="black"> ${tornaguia.driver.licencia}</small></div>
     </td>
-    <td class="border width-50">
-      <div><small class="bold h4 color">Tipo de Material:</small><small class="black">${tornaguia.tipoMaterial}</small></div>
-      <div><small class="bold h4 color">Minerales:</small><small class="black"> ${tornaguia.minerales}</small></div>
-      <div><small class="bold h4 color">Peso en Toneladas:</small><small class="black"> ${tornaguia.peso}</small></div>
-      <div><small class="bold h4 color">Cantidad de Sacos:</small><small class="black"> ${tornaguia.sacos}</small></div>
-      <div><small class="bold h4 color">No. de Lote:</small><small class="black"> </small></div>
+    <td class="${tipo=='nada'?'':'border'} width-50">
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Tipo de Material:</small><small class="black">${tornaguia.tipoMaterial}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Minerales:</small><small class="black"> ${tornaguia.minerales}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Peso en Toneladas:</small><small class="black"> ${tornaguia.peso}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Cantidad de Sacos:</small><small class="black"> ${tornaguia.sacos}</small></div>
+      <div><small class="bold h4 color ${tipo=='nada'?'hide':'show'}">No. de Lote:</small><small class="black"> </small></div>
     </td>
    </tr>
 </table>
 <table class="width-100">
 <tr valign="bottom">
-    <td class="width-25 border center color" >
+    <td class="width-25 ${tipo=='nada'?'':'border'} center color ${tipo=='nada'?'hide':'show'}" >
         <div class="h5">Presidente, Consejo de</div>
         <div class="h5">Administracion</div>
         <div class="h5">Sello, Nombre, C.I. y Firma</div>
      </td>
-     <td class="width-25 border center color">
+     <td class="width-25 ${tipo=='nada'?'':'border'} center color ${tipo=='nada'?'hide':'show'}">
         <div class="h5">Empresa Receptora</div>
         <div class="h5">Sello y Firma</div>
      </td>
-     <td class="width-25 border center color">
+     <td class="width-25 ${tipo=='nada'?'':'border'} center color ${tipo=='nada'?'hide':'show'}">
         <div class="h5">Presidente, Consejo de</div>
         <div class="h5">Vigilancia</div>
         <div class="h5">Sello, Nombre, C.I. y Firma</div>
      </td>
-     <td class="width-25 border center color">
-        <img src="${url}" alt="">
+     <td class="width-25 ${tipo=='nada'?'':'border'} right color ">
+        <img src="${url}" alt="" width="100px">
      </td>
 </tr>
 </table>
@@ -413,7 +488,10 @@ export default {
     },
     tornaguiasGet(){
       this.$q.loading.show()
-      this.$api.get('tornaguia').then(response => {
+      this.$api.post('tornaguiaSearch',{
+        fechaDesde: this.fecha1,
+        fechaHasta: this.fecha2,
+      }).then(response => {
         this.tornaguias=[]
         response.data.forEach(d=>{
           // d.fecha= date.formatDate(d.created_at, 'YYYY-MM-DD HH:mm:ss')
@@ -422,6 +500,44 @@ export default {
 
         this.$q.loading.hide()
       })
+    },
+    buscar(){
+      this.tornaguiasGet()
+    },
+    tornaguiaDownload(){
+      let data = [
+        {
+          columns: [
+            // { label: "User", value: "user" }, // Top level data
+            // { label: "Age", value: (row) => row.age + " years" }, // Custom format
+            // { label: "Phone", value: (row) => (row.more ? row.more.phone || "" : "") }, // Run functions
+            {label:"fecha",value:"fecha"},
+            {label:"numero",value:"numero"},
+            {label:"yacimiento",value:"yacimiento"},
+            {label:"tranca",value:"tranca"},
+            {label:"cuadrilla",value:"cuadrilla"},
+            {label:"tipoMaterial",value:"tipoMaterial"},
+            {label:"minerales",value:"minerales"},
+            {label:"peso",value:"peso"},
+            {label:"sacos",value:"sacos"},
+            {label:"transporte",value:(row)=>row.transporte.placa},
+            {label:"empresa",value:(row)=>row.empresa.nombre},
+            {label:"contratista",value:(row)=>row.contratista.nombre},
+            {label:"user",value:(row)=>row.user.name},
+            {label:"conductor",value:(row)=>row.driver.name},
+          ],
+          content: this.tornaguias,
+        },
+      ]
+
+      let settings = {
+        fileName: "Tornaguia", // Name of the resulting spreadsheet
+        // extraLength: 3, // A bigger number means that columns will be wider
+        writeMode: 'writeFile', // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+        writeOptions: {}, // Style options from https://github.com/SheetJS/sheetjs#writing-options
+      }
+
+      xlsx(data, settings) // Will download the excel file
     },
     tornaguiaClick(){
       this.tornaguia={

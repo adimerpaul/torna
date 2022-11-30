@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('contratista', App\Http\Controllers\ContratistaController::class);
     Route::apiResource('empresa', App\Http\Controllers\EmpresaController::class);
     Route::apiResource('tornaguia', App\Http\Controllers\TornaguiaController::class);
+    Route::post('tornaguiaSearch', [App\Http\Controllers\TornaguiaController::class,'tornaguiaSearch']);
     Route::apiResource('driver', App\Http\Controllers\DriverController::class);
     Route::apiResource('user', App\Http\Controllers\UserController::class);
 });

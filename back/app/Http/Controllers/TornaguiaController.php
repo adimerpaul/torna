@@ -8,6 +8,17 @@ use App\Http\Requests\UpdateTornaguiaRequest;
 use Illuminate\Http\Request;
 
 class TornaguiaController extends Controller{
+     public function tornaguiaSearch(Request $request){
+         return Tornaguia::where('fecha', '>=', $request->fechaDesde)
+             ->where('fecha', '<=', $request->fechaHasta)
+             ->with('transporte')
+             ->with('empresa')
+             ->with('contratista')
+             ->with('user')
+             ->with('driver')
+             ->orderBy('id','desc')
+             ->get();
+    }
     public function index(){
         return Tornaguia::orderBy('id', 'desc')
             ->with('transporte')
@@ -15,9 +26,17 @@ class TornaguiaController extends Controller{
             ->with('contratista')
             ->with('user')
             ->with('driver')
+            ->orderBy('id','desc')
             ->get();
     }
-    public function show(Tornaguia $tornaguia){ return $tornaguia; }
+    public function show($id){
+        return Tornaguia::with('transporte')
+            ->with('empresa')
+            ->with('contratista')
+            ->with('user')
+            ->with('driver')
+            ->find($id);
+    }
     public function store(Request $request){
         $request->validate([
             'fecha'=>'required',

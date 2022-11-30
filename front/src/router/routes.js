@@ -5,6 +5,7 @@ import Transporte from "pages/Transporte";
 import Tornaguia from "pages/Tornaguia";
 import Driver from "pages/Driver";
 import User from "pages/User";
+import Show from "pages/Show";
 
 const routes = [
   {
@@ -18,8 +19,10 @@ const routes = [
       { path: 'tornaguia', component: Tornaguia ,meta:{requiresAuth: true}},
       { path: 'driver', component: Driver ,meta:{requiresAuth: true}},
       { path: 'user', component: User ,meta:{requiresAuth: true}},
+
     ]
   },
+  { path: '/show/:id', component:Show,meta:{requiresAuth: true}},
   {
     path: '/login',
     component: Login,

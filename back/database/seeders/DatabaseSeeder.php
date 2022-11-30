@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             UserSeeder::class,
-            ContratistaSeeder::class,
-            EmpresaSeeder::class,
-            TransporteSeeder::class,
-            DriverSeeder::class,
+//            ContratistaSeeder::class,
+//            EmpresaSeeder::class,
+//            TransporteSeeder::class,
+//            DriverSeeder::class,
         ]);
     }
 }
