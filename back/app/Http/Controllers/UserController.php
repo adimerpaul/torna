@@ -58,7 +58,15 @@ class UserController extends Controller
         return User::with('permissions')->get();
     }
     public function show(User $user){ return $user; }
-    public function store(Request $request){ return User::create($request->all()); }
+    public function store(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+        $request['password'] = Hash::make($request->password);
+        return User::create($request->all());
+    }
     public function update(Request $request, $id){
         return User::find($id)->update($request->all());
     }
