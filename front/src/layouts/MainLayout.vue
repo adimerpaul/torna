@@ -29,27 +29,27 @@
           <!--          </q-item>-->
         </q-toolbar-title>
         <div class="row q-pt-xs">
-          <div class="col-8">
-            <q-input dense rounded outlined v-model="search" placeholder="Buscar">
-              <template v-slot:prepend>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </div>
-          <div class="col-2 flex flex-center">
-            <q-btn
-              flat
-              dense
-              round
-              color="primary"
-              icon="o_notifications"
-              aria-label="Notifications">
-              <q-badge color="primary" floating transparent>
-                4
-              </q-badge>
-            </q-btn>
-          </div>
-          <div class="col-2 flex flex-center">
+<!--          <div class="col-8">-->
+<!--&lt;!&ndash;            <q-input dense rounded outlined v-model="search" placeholder="Buscar">&ndash;&gt;-->
+<!--&lt;!&ndash;              <template v-slot:prepend>&ndash;&gt;-->
+<!--&lt;!&ndash;                <q-icon name="search" />&ndash;&gt;-->
+<!--&lt;!&ndash;              </template>&ndash;&gt;-->
+<!--&lt;!&ndash;            </q-input>&ndash;&gt;-->
+<!--          </div>-->
+<!--          <div class="col-2 flex flex-center">-->
+<!--&lt;!&ndash;            <q-btn&ndash;&gt;-->
+<!--&lt;!&ndash;              flat&ndash;&gt;-->
+<!--&lt;!&ndash;              dense&ndash;&gt;-->
+<!--&lt;!&ndash;              round&ndash;&gt;-->
+<!--&lt;!&ndash;              color="primary"&ndash;&gt;-->
+<!--&lt;!&ndash;              icon="o_notifications"&ndash;&gt;-->
+<!--&lt;!&ndash;              aria-label="Notifications">&ndash;&gt;-->
+<!--&lt;!&ndash;              <q-badge color="primary" floating transparent>&ndash;&gt;-->
+<!--&lt;!&ndash;                4&ndash;&gt;-->
+<!--&lt;!&ndash;              </q-badge>&ndash;&gt;-->
+<!--&lt;!&ndash;            </q-btn>&ndash;&gt;-->
+<!--          </div>-->
+          <div class="col-12 flex flex-center">
             <q-btn round>
               <q-avatar size="38px" >
                 <q-icon name="account_circle"  size="38px" color="primary" />
@@ -114,7 +114,7 @@
                 Principal
               </q-item-section>
             </q-item>
-            <q-item clickable exact to="tornaguia" active-class="bg-blue-grey-6 text-white">
+            <q-item v-if="store.permissions.includes('tornaguia create')||store.permissions.includes('tornaguia read')||store.permissions.includes('tornaguia update')||store.permissions.includes('tornaguia delete')" clickable exact to="tornaguia" active-class="bg-blue-grey-6 text-white">
               <q-item-section avatar>
                 <q-icon name="o_description" />
               </q-item-section>
@@ -122,7 +122,7 @@
                 Tornaguias
               </q-item-section>
             </q-item>
-            <q-item clickable exact to="transporte" active-class="bg-blue-grey-6 text-white">
+            <q-item v-if="store.permissions.includes('transporte create')||store.permissions.includes('transporte read')||store.permissions.includes('transporte update')||store.permissions.includes('transporte delete')" clickable exact to="transporte" active-class="bg-blue-grey-6 text-white">
               <q-item-section avatar>
                 <q-icon name="o_directions_bus_filled" />
               </q-item-section>
@@ -130,7 +130,7 @@
                 Transporte
               </q-item-section>
             </q-item>
-            <q-item clickable exact to="contratista" active-class="bg-blue-grey-6 text-white">
+            <q-item v-if="store.permissions.includes('contratista create')||store.permissions.includes('contratista read')||store.permissions.includes('contratista update')||store.permissions.includes('contratista delete')" clickable exact to="contratista" active-class="bg-blue-grey-6 text-white">
               <q-item-section avatar>
                 <q-icon name="work_outline" />
               </q-item-section>
@@ -138,7 +138,7 @@
                 Contratista
               </q-item-section>
             </q-item>
-            <q-item clickable exact to="empresa" active-class="bg-blue-grey-6 text-white">
+            <q-item v-if="store.permissions.includes('empresa create')||store.permissions.includes('empresa read')||store.permissions.includes('empresa update')||store.permissions.includes('empresa delete')" clickable exact to="empresa" active-class="bg-blue-grey-6 text-white">
               <q-item-section avatar>
                 <q-icon name="o_business" />
               </q-item-section>
@@ -146,7 +146,7 @@
                 Empresa
               </q-item-section>
             </q-item>
-            <q-item clickable exact to="driver" active-class="bg-blue-grey-6 text-white">
+            <q-item v-if="store.permissions.includes('conductor create')||store.permissions.includes('conductor read')||store.permissions.includes('conductor update')||store.permissions.includes('conductor delete')" clickable exact to="driver" active-class="bg-blue-grey-6 text-white">
               <q-item-section avatar>
                 <q-icon name="o_legend_toggle" />
               </q-item-section>
@@ -154,7 +154,7 @@
                 Conductores
               </q-item-section>
             </q-item>
-            <q-item v-if="store.user.id==1" clickable exact to="user" active-class="bg-blue-grey-6 text-white">
+            <q-item v-if="store.permissions.includes('user create')||store.permissions.includes('user read')||store.permissions.includes('user update')||store.permissions.includes('user delete')" clickable exact to="user" active-class="bg-blue-grey-6 text-white">
               <q-item-section avatar>
                 <q-icon name="o_people" />
               </q-item-section>

@@ -10,7 +10,7 @@
             <q-input  outlined dense type="date" v-model="fecha2" label="Fecha Hasta"/>
           </div>
           <div class="col-12 col-sm-4 flex flex-center">
-            <q-btn icon="search" color="primary" label="Buscar" @click="buscar" />
+            <q-btn v-if="store.permissions.includes('tornaguia read')" icon="search" color="primary" label="Buscar" @click="buscar" />
           </div>
         </div>
       </q-card-section>
@@ -18,8 +18,8 @@
     <q-table :rows="tornaguias" :columns="tornaguiaColums" :filter="search">
       <template v-slot:top-right>
         <q-toolbar>
-          <q-btn color="green" :label="$q.screen.lt.md?'':'Descargar excel'" icon="download" @click="tornaguiaDownload" />
-          <q-btn color="primary" :label="$q.screen.lt.md?'':'Crear tornagia'" icon="add_circle_outline" @click="tornaguiaClick" />
+          <q-btn v-if="store.permissions.includes('tornaguia read')" color="green" :label="$q.screen.lt.md?'':'Descargar excel'" icon="download" @click="tornaguiaDownload" />
+          <q-btn v-if="store.permissions.includes('tornaguia create')" color="primary" :label="$q.screen.lt.md?'':'Crear tornagia'" icon="add_circle_outline" @click="tornaguiaClick" />
           <q-input v-model="search"  outlined  dense placeholder="Buscar..." />
         </q-toolbar>
       </template>
@@ -32,31 +32,31 @@
         <q-td :props="props" auto-width >
           <q-btn-dropdown color="primary" label="Opciones" no-caps>
             <q-list>
-              <q-item clickable v-close-popup @click="ver(props.row)" >
+              <q-item v-if="store.permissions.includes('tornaguia update')" clickable v-close-popup @click="ver(props.row)" >
                 <q-item-section avatar>
                   <q-icon name="o_edit" />
                 </q-item-section>
                 <q-item-section>Modificar</q-item-section>
               </q-item>
-              <q-item clickable v-close-popup @click="print(props.row,'todo')" >
+              <q-item v-if="store.permissions.includes('tornaguia read')" clickable v-close-popup @click="print(props.row,'todo')" >
                 <q-item-section avatar>
                   <q-icon name="o_print" />
                 </q-item-section>
                 <q-item-section>Imprimir Todo</q-item-section>
               </q-item>
-              <q-item clickable v-close-popup @click="print(props.row,'nada')" >
+              <q-item v-if="store.permissions.includes('tornaguia read')" clickable v-close-popup @click="print(props.row,'nada')" >
                 <q-item-section avatar>
                   <q-icon name="o_print" />
                 </q-item-section>
                 <q-item-section>Imprimir sin nada</q-item-section>
               </q-item>
-              <q-item clickable v-close-popup @click="print(props.row,'fondo')" >
+              <q-item v-if="store.permissions.includes('tornaguia read')" clickable v-close-popup @click="print(props.row,'fondo')" >
                 <q-item-section avatar>
                   <q-icon name="o_print" />
                 </q-item-section>
                 <q-item-section>Imprimir con fondo</q-item-section>
               </q-item>
-              <q-item clickable v-close-popup  :to="'/show/'+props.row.id">
+              <q-item v-if="store.permissions.includes('tornaguia read')" clickable v-close-popup  :to="'/show/'+props.row.id">
                 <q-item-section avatar>
                   <q-icon name="o_visibility" />
                 </q-item-section>

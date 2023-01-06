@@ -14,7 +14,7 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ]);
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->with('permissions')->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
                 return [
@@ -23,18 +23,19 @@ class UserController extends Controller
                 ];
             } else {
                 return response()->json([
-                    'message' => 'Invalid password'
+                    'message' => 'Contraseña incorrecta'
                 ], 401);
             }
         } else {
             return response()->json([
-                'message' => 'User not found'
+                'message' => 'Usuario no encontrado'
             ], 404);
         }
     }
     public function me(Request $request)
     {
-        return $request->user();
+        $user = User::where('id', $request->user()->id)->with('permissions')->first();
+        return $user;
     }
     public function logout(Request $request)
     {
@@ -53,7 +54,9 @@ class UserController extends Controller
         return $user;
     }
 
-    public function index(){ return User::orderBy('name')->get(); }
+    public function index(){
+        return User::with('permissions')->get();
+    }
     public function show(User $user){ return $user; }
     public function store(Request $request){ return User::create($request->all()); }
     public function update(Request $request, $id){

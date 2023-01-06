@@ -41,7 +41,42 @@ class UserSeeder extends Seeder
         Permission::create(['name'=>'tornaguia update']);
         Permission::create(['name'=>'tornaguia delete']);
 
-        $user->givePermissionTo('empresa create','empresa read','empresa update','empresa delete','contratista create','contratista read','contratista update','contratista delete','transporte create','transporte read','transporte update','transporte delete','tornaguia create','tornaguia read','tornaguia update','tornaguia delete');
+        Permission::create(['name'=>'conductor create']);
+        Permission::create(['name'=>'conductor read']);
+        Permission::create(['name'=>'conductor update']);
+        Permission::create(['name'=>'conductor delete']);
+
+        Permission::create(['name'=>'user create']);
+        Permission::create(['name'=>'user read']);
+        Permission::create(['name'=>'user update']);
+        Permission::create(['name'=>'user delete']);
+
+        $user->givePermissionTo(
+            'empresa create',
+            'empresa read',
+            'empresa update',
+            'empresa delete',
+            'contratista create',
+            'contratista read',
+            'contratista update',
+            'contratista delete',
+            'transporte create',
+            'transporte read',
+            'transporte update',
+            'transporte delete',
+            'tornaguia create',
+            'tornaguia read',
+            'tornaguia update',
+            'tornaguia delete',
+            'conductor create',
+            'conductor read',
+            'conductor update',
+            'conductor delete',
+            'user create',
+            'user read',
+            'user update',
+            'user delete',
+        );
 //        $user->assignRole('admin');
     }
 }

@@ -3,7 +3,7 @@
     <q-table :rows="empresas" :columns="empresaColums" :filter="search">
       <template v-slot:top-right>
         <q-toolbar>
-          <q-btn flat icon="add_circle_outline" @click="showAddUserDialog = true;empresaCrear=true" />
+          <q-btn v-if="store.permissions.includes('empresa create')" flat icon="add_circle_outline" @click="showAddUserDialog = true;empresaCrear=true" />
           <q-input v-model="search"  outlined  dense placeholder="Buscar..." />
         </q-toolbar>
       </template>
@@ -14,8 +14,8 @@
       </template>
       <template v-slot:body-cell-option="props">
         <q-td :props="props" auto-width >
-          <q-btn flat dense icon="o_edit" @click="empresaEdit(props.row)" />
-          <q-btn flat dense icon="o_delete" @click="empresaDelete(props.row)" />
+          <q-btn v-if="store.permissions.includes('empresa update')" flat dense icon="o_edit" @click="empresaEdit(props.row)" />
+          <q-btn v-if="store.permissions.includes('empresa delete')" flat dense icon="o_delete" @click="empresaDelete(props.row)" />
         </q-td>
       </template>
     </q-table>
@@ -55,10 +55,13 @@
 </template>
 
 <script>
+import {useCounterStore} from "stores/example-store";
+
 export default {
   name: `User`,
   data () {
     return {
+      store: useCounterStore(),
       roles: [
         'INSCRIPCION',
         'ACREDITACION',

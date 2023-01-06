@@ -3,7 +3,7 @@
     <q-table :rows="drivers" :columns="driverColums" :filter="search">
       <template v-slot:top-right>
         <q-toolbar>
-          <q-btn flat icon="add_circle_outline" @click="showAddDriverDialog = true;driverCrear=true" />
+          <q-btn v-if="store.permissions.includes('conductor create')" flat icon="add_circle_outline" @click="showAddDriverDialog = true;driverCrear=true" />
           <q-input v-model="search"  outlined  dense placeholder="Buscar..." />
         </q-toolbar>
       </template>
@@ -14,8 +14,8 @@
       </template>
       <template v-slot:body-cell-option="props">
         <q-td :props="props" auto-width >
-          <q-btn flat dense icon="o_edit" @click="driverEdit(props.row)" />
-          <q-btn flat dense icon="o_delete" @click="driverDelete(props.row)" />
+          <q-btn v-if="store.permissions.includes('conductor update')" flat dense icon="o_edit" @click="driverEdit(props.row)" />
+          <q-btn v-if="store.permissions.includes('conductor delete')" flat dense icon="o_delete" @click="driverDelete(props.row)" />
         </q-td>
       </template>
     </q-table>
@@ -57,10 +57,13 @@
 </template>
 
 <script>
+import {useCounterStore} from "stores/example-store";
+
 export default {
   name: `Driver`,
   data () {
     return {
+      store: useCounterStore(),
       roles: [
         'INSCRIPCION',
         'ACREDITACION',
