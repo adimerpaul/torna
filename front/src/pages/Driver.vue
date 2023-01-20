@@ -28,7 +28,7 @@
           <q-form @submit.prevent="driverCreate">
             <q-input v-model="driver.name" hint="" required outlined label="Nombre" />
             <q-input v-model="driver.contacto" hint="" required outlined label="Contacto" />
-            <q-input v-model="driver.telefono" hint="" required outlined label="Telefono" />
+<!--            <q-input v-model="driver.telefono" hint="" required outlined label="Telefono" />-->
             <q-input v-model="driver.celular" hint="" required outlined label="Celular" />
             <q-input v-model="driver.licencia" hint="" required outlined label="Licencia" />
             <q-btn :loading="loading" type="submit" color="primary" icon="add_circle_outline" label="Guardar" class="full-width" />
@@ -45,7 +45,7 @@
           <q-form @submit.prevent="driverUpdate">
             <q-input v-model="driver.name" hint="" required outlined label="Nombre" />
             <q-input v-model="driver.contacto" hint="" required outlined label="Contacto" />
-            <q-input v-model="driver.telefono" hint="" required outlined label="Telefono" />
+<!--            <q-input v-model="driver.telefono" hint="" required outlined label="Telefono" />-->
             <q-input v-model="driver.celular" hint="" required outlined label="Celular" />
             <q-input v-model="driver.licencia" hint="" required outlined label="Licencia" />
             <q-btn :loading="loading" type="submit" color="primary" icon="add_circle_outline" label="Guardar" class="full-width" />

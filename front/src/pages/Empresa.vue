@@ -28,7 +28,7 @@
           <q-form @submit.prevent="empresaCreate">
             <q-input v-model="empresa.nombre" hint="" required outlined label="Nombre" />
             <q-select v-model="empresa.ciudad" hint="" required outlined label="Ciudad" :options="['ORURO','LA PAZ','COCHABAMBA','SANTA CRUZ','POTOSI','TARIJA','CHUQUISACA','BENI','PANDO']" />
-            <q-input v-model="empresa.telefono" hint="" required outlined label="Telefono" />
+            <q-input v-model="empresa.telefono" hint="" required outlined label="Celular" />
             <q-input v-model="empresa.nit" hint="" required outlined label="NIT" />
             <q-btn :loading="loading" type="submit" color="primary" icon="add_circle_outline" label="Guardar" class="full-width" />
           </q-form>
@@ -44,7 +44,7 @@
           <q-form @submit.prevent="empresaUpdate">
             <q-input v-model="empresa.nombre" hint="" required outlined label="Nombre" />
             <q-select v-model="empresa.ciudad" hint="" required outlined label="Ciudad" :options="['ORURO','LA PAZ','COCHABAMBA','SANTA CRUZ','POTOSI','TARIJA','CHUQUISACA','BENI','PANDO']" />
-            <q-input v-model="empresa.telefono" hint="" required outlined label="Telefono" />
+            <q-input v-model="empresa.telefono" hint="" required outlined label="Celular" />
             <q-input v-model="empresa.nit" hint="" required outlined label="NIT" />
             <q-btn :loading="loading" type="submit" color="primary" icon="add_circle_outline" label="Guardar" class="full-width" />
           </q-form>

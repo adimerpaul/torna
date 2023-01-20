@@ -4,10 +4,10 @@
       <q-card-section>
         <div class="row">
           <div class="col-12 col-sm-4">
-            <q-input  outlined dense type="date" v-model="fecha1" label="Fecha Desde" />
+            <q-input v-if="store.permissions.includes('tornaguia read')"  outlined dense type="date" v-model="fecha1" label="Fecha Desde" />
           </div>
           <div class="col-12 col-sm-4">
-            <q-input  outlined dense type="date" v-model="fecha2" label="Fecha Hasta"/>
+            <q-input v-if="store.permissions.includes('tornaguia read')"  outlined dense type="date" v-model="fecha2" label="Fecha Hasta"/>
           </div>
           <div class="col-12 col-sm-4 flex flex-center">
             <q-btn v-if="store.permissions.includes('tornaguia read')" icon="search" color="primary" label="Buscar" @click="buscar" />
@@ -82,7 +82,7 @@
                     <q-input  v-model="tornaguia.fecha" type="date" :label="`Fecha: ${tornaguia.fecha} `" outlined dense />
                   </div>
                   <div class="col-12 col-sm-6">
-                    <q-input  v-model="tornaguia.numero" type="number" label="Número Asignado:" outlined dense />
+                    <q-input  v-model="tornaguia.numero" type="number" label="Número Asignado:" outlined dense :rules="[val => val > 0 || 'Debe ser mayor a 0']" />
                   </div>
                 </div>
               </q-card-section>
@@ -105,13 +105,13 @@
               <q-card-section>
                 <div class="row">
                   <div class="col-12 col-sm-4">
-                    <q-input  v-model="tornaguia.yacimiento" label="Yacimiento:" outlined dense />
+                    <q-input  v-model="tornaguia.yacimiento" label="Yacimiento:" outlined dense :rules="[val=>!!val||'Porfavor registrar dato']" />
                   </div>
                   <div class="col-12 col-sm-4">
-                    <q-input  v-model="tornaguia.tranca" label="Tranca:" outlined dense />
+                    <q-input  v-model="tornaguia.tranca" label="Tranca:" outlined dense :rules="[val=>!!val||'Porfavor registrar dato']" />
                   </div>
                   <div class="col-12 col-sm-4">
-                    <q-input  v-model="tornaguia.cuadrilla" label="Cuadrilla:" outlined dense />
+                    <q-input  v-model="tornaguia.cuadrilla" label="Cuadrilla:" outlined dense :rules="[val=>!!val||'Porfavor registrar dato']" />
                   </div>
                 </div>
               </q-card-section>
@@ -135,8 +135,8 @@
                 <div class="row">
                   <div class="col-12 col-sm-6">
                     <div class="text-bold">Tipo de Material:</div>
-                    <q-radio  v-model="tornaguia.tipoMaterial" val="Mineral" label="Mineral" />
-                    <q-radio  v-model="tornaguia.tipoMaterial" val="Embolsado" label="Embolsado" />
+                    <q-radio  v-model="tornaguia.tipoMaterial" val="Mineral" label="Mineral" :rules="[val=>!!val||'Porfavor registrar dato']" />
+                    <q-radio  v-model="tornaguia.tipoMaterial" val="Embolsado" label="Embolsado" :rules="[val=>!!val||'Porfavor registrar dato']" />
                   </div>
                   <div class="col-12 col-sm-6">
                     <div class="text-bold">Minerales:</div>
@@ -148,10 +148,10 @@
 <!--                    <q-input  v-model="tornaguia.minerales" disable label="Minerales:" outlined dense />-->
                   </div>
                   <div class="col-12 col-sm-6">
-                    <q-input  v-model="tornaguia.peso" type="number" label="Peso en Tn.:" outlined dense />
+                    <q-input  v-model="tornaguia.peso" v-if="tornaguia.tipoMaterial=='Mineral'" type="number" label="Peso en Tn.:" outlined dense />
                   </div>
                   <div class="col-12 col-sm-6">
-                    <q-input  v-model="tornaguia.sacos" type="number" label="Cantidad de Sacos:" outlined dense />
+                    <q-input  v-model="tornaguia.sacos" v-if="tornaguia.tipoMaterial=='Embolsado'" type="number" label="Cantidad de Sacos:" outlined dense />
                   </div>
                 </div>
               </q-card-section>
@@ -452,6 +452,7 @@ export default {
         })
     },
     ver(tornaguia){
+      // console.log(tornaguia)
       this.showAddTornaguiaDialog = true
       this.tornaguiaCrear = false
       this.tornaguia=tornaguia
@@ -459,7 +460,11 @@ export default {
       this.tornaguia.empresas={label:tornaguia.empresa.nombre, value:tornaguia.empresa.id}
       this.tornaguia.contratistas={label:tornaguia.contratista.nombre, value:tornaguia.contratista.id}
       this.tornaguia.drivers={label:tornaguia.driver.name, value:tornaguia.driver.id}
-      this.tornaguia.mineralesSel=tornaguia.minerales.split(",")
+      if (tornaguia.minerales!=null) {
+        this.tornaguia.mineralesSel=tornaguia.minerales.split(",")
+      }else{
+        this.tornaguia.mineralesSel=[]
+      }
     },
     tornaguiaUpdate(){
       this.loading = true
@@ -541,8 +546,9 @@ export default {
     },
     tornaguiaClick(){
       this.tornaguia={
-          fecha:date.formatDate(new Date(), 'YYYY-MM-DD'),
-          mineralesSel:[],
+        tipoMaterial: 'Mineral',
+        fecha:date.formatDate(new Date(), 'YYYY-MM-DD'),
+        mineralesSel:[],
       }
       this.showAddTornaguiaDialog = true;
       this.tornaguiaCrear=true

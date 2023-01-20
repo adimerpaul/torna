@@ -39,20 +39,20 @@ class TornaguiaController extends Controller{
     }
     public function store(Request $request){
         $request->validate([
-            'fecha'=>'required',
-            'numero'=>'required',
-            'yacimiento'=>'required',
-            'tranca'=>'required',
-            'cuadrilla'=>'required',
-            'tipoMaterial'=>'required',
+//            'fecha'=>'required',
+//            'numero'=>'required',
+//            'yacimiento'=>'required',
+//            'tranca'=>'required',
+//            'cuadrilla'=>'required',
+//            'tipoMaterial'=>'required',
             'minerales'=>'required',
-            'peso'=>'required',
-            'sacos'=>'required',
-            'transporte_id'=>'required',
-            'empresa_id'=>'required',
-            'contratista_id'=>'required',
-            'user_id'=>'required',
-            'driver_id'=>'required',
+//            'peso'=>'required',
+//            'sacos'=>'required',
+//            'transporte_id'=>'required',
+//            'empresa_id'=>'required',
+//            'contratista_id'=>'required',
+//            'user_id'=>'required',
+//            'driver_id'=>'required',
         ]);
         return Tornaguia::create($request->all());
     }

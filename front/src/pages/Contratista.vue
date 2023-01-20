@@ -27,7 +27,7 @@
         <q-card-section>
           <q-form @submit.prevent="contratistaCreate">
             <q-input v-model="contratista.nombre" hint="" required outlined label="Nombre" />
-            <q-input v-model="contratista.telefono" hint="" required outlined label="Telefono" />
+<!--            <q-input v-model="contratista.telefono" hint="" required outlined label="Telefono" />-->
             <q-input v-model="contratista.celular" hint="" required outlined label="Celular" />
             <q-input v-model="contratista.direccion" hint="" required outlined label="Direccion" />
             <q-input v-model="contratista.ci" hint="" required outlined label="CI" />
@@ -44,7 +44,7 @@
         <q-card-section>
           <q-form @submit.prevent="contratistaUpdate">
             <q-input v-model="contratista.nombre" hint="" required outlined label="Nombre" />
-            <q-input v-model="contratista.telefono" hint="" required outlined label="Telefono" />
+<!--            <q-input v-model="contratista.telefono" hint="" required outlined label="Telefono" />-->
             <q-input v-model="contratista.celular" hint="" required outlined label="Celular" />
             <q-input v-model="contratista.direccion" hint="" required outlined label="Direccion" />
             <q-input v-model="contratista.ci" hint="" required outlined label="CI" />

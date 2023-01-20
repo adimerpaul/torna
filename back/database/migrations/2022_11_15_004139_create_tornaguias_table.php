@@ -15,15 +15,15 @@ return new class extends Migration
     {
         Schema::create('tornaguias', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha');
-            $table->string('numero');
-            $table->string('yacimiento');
-            $table->string('tranca');
-            $table->string('cuadrilla');
-            $table->string('tipoMaterial');
-            $table->string('minerales');
-            $table->integer('peso');
-            $table->integer('sacos');
+            $table->date('fecha')->nullable();
+            $table->string('numero')->nullable();
+            $table->string('yacimiento')->nullable();
+            $table->string('tranca')->nullable();
+            $table->string('cuadrilla')->nullable();
+            $table->string('tipoMaterial')->nullable();
+            $table->string('minerales')->nullable();
+            $table->integer('peso')->nullable();
+            $table->integer('sacos')->nullable();
             $table->unsignedBigInteger('transporte_id');
             $table->foreign('transporte_id')->references('id')->on('transportes');
             $table->unsignedBigInteger('empresa_id');
