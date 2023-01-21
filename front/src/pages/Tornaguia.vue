@@ -62,6 +62,12 @@
                 </q-item-section>
                 <q-item-section>Ver</q-item-section>
               </q-item>
+              <q-item v-if="store.permissions.includes('tornaguia read')" clickable v-close-popup @click="printPage(props.row)" >
+                <q-item-section avatar>
+                  <q-icon name="o_print" />
+                </q-item-section>
+                <q-item-section>Imprimir hoja</q-item-section>
+              </q-item>
             </q-list>
           </q-btn-dropdown>
         </q-td>
@@ -187,6 +193,7 @@ import {useCounterStore} from "stores/example-store";
 import { Printd } from 'printd'
 import QRCode from 'qrcode'
 import xlsx from "json-as-xlsx"
+import { jsPDF } from 'jspdf'
 
 export default {
   name: `Tornaguia`,
@@ -254,6 +261,38 @@ export default {
     });
   },
   methods:{
+    printPage(tornaguia){
+      console.log(tornaguia)
+      const doc = new jsPDF('portrait','cm','letter')
+      doc.setFontSize(12)
+      doc.setFont('helvetica','bold')
+      doc.text(tornaguia.fecha+'', 2.5, 4.5);
+      doc.text(tornaguia.yacimiento+'', 3.5, 6.5);
+      doc.text(tornaguia.cuadrilla+'', 7, 6.5);
+      doc.text(tornaguia.tranca+'', 4, 7.3);
+      doc.text(tornaguia.empresa.nombre+'', 12, 6.5);
+      doc.text(tornaguia.contratista.nombre+'', 13, 7.3);
+      doc.text(tornaguia.transporte.tipo+'', 2.3, 8.7);
+      doc.text(tornaguia.transporte.marca+'', 6.5, 8.7);
+      doc.text(tornaguia.transporte.color+'', 2.3, 9.5);
+      doc.text(tornaguia.transporte.placa+'', 6.5, 9.5);
+      doc.text(tornaguia.driver.name+'', 4.5, 10.2);
+      doc.text(tornaguia.driver.licencia+'', 2.5, 11);
+      doc.text(tornaguia.tipoMaterial+'', 13.5, 8.7);
+      doc.text(tornaguia.minerales+'', 17, 9.3);
+      doc.text((tornaguia.peso==null?'':tornaguia.peso)+'', 13.5, 9.7);
+      doc.text((tornaguia.sacos==null?'':tornaguia.sacos)+'', 13.5, 10.4);
+      const time = date.formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss')
+      var opts = {
+        errorCorrectionLevel: 'H',
+        type: 'image/jpeg',
+        margin: 1,
+      }
+      QRCode.toDataURL(process.env.API_FRONT+'show/'+tornaguia.id, function (err, url) {
+        doc.addImage(url, 'JPEG', 17, 10.5, 4, 4)
+        doc.save(`torna${time}.pdf`);
+      })
+    },
     print(tornaguia,tipo){
       tornaguia.numero=tornaguia.numero.toString().padStart(6, '0')
       let fondo=''
@@ -341,7 +380,7 @@ export default {
   .right{
     text-align: right;
   }
-  .absolute{
+  .absolute-position{
     position: absolute;
     top: 0px;
     z-index: -1;
@@ -351,7 +390,7 @@ export default {
     padding-right: 20px;
   }
 </style>
-<img class="absolute ${fondo=='fondo'?'show':'hide'}" src="fondo.png" alt="imagen" >
+<img class="absolute-position ${fondo=='fondo'?'show':'hide'}" src="fondo.png" alt="imagen" >
 <table class="border collapse width-100 ${tipo=='nada'?'hide':'show'}">
   <tr>
     <td class="center border"><img src="logo1.png" alt="logo1" width="50px"></td>
@@ -375,7 +414,7 @@ export default {
       <small class="bold h4 color ${tipo=='nada'?'hide':'show'}">Fecha:</small><small class="black"> ${tornaguia.fecha} </small>
     </td>
     <td class="${tipo=='nada'?'':'border'} width-50" >
-      <div  style="display: flex; justify-content: space-between"><span class="bold h4 color ${tipo=='nada'?'hide':'show'}">No:</span> <div class="red bold padding-right">${tornaguia.numero}</div></div>
+      <!--div  style="display: flex; justify-content: space-between"><span class="bold h4 color ${tipo=='nada'?'hide':'show'}">No:</span> <div class="red bold padding-right">${tornaguia.numero}</div></div-->
     </td>
    </tr>
    <tr>

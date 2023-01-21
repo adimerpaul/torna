@@ -58,7 +58,6 @@
 
 <script>
 import {useCounterStore} from "stores/example-store";
-
 export default {
   name: `Driver`,
   data () {
