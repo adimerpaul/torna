@@ -80,6 +80,7 @@ module.exports = configure(function (ctx) {
       env:{
         API: ctx.dev ? 'http://localhost:8000/api/' : 'https://btorna.siscenter.org/api/',
         API_FRONT: ctx.dev ? 'http://localhost:8080/#/' : 'https://torna.siscenter.org/#/',
+        API_FRONT_LOCAL: ctx.dev ? 'https://torna.siscenter.org/#/' : 'https://torna.siscenter.org/#/',
       }
 
     },
