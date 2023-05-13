@@ -306,7 +306,7 @@ export default {
         type: 'image/jpeg',
         margin: 1,
       }
-      QRCode.toDataURL(process.env.API_FRONT+'show/'+tornaguia.id, function (err, url) {
+      QRCode.toDataURL(process.env.API_FRONT_LOCAL+'show/'+tornaguia.id, function (err, url) {
         doc.addImage(url, 'JPEG', 17, 10.5, 4, 4)
         doc.save(`torna${time}.pdf`);
       })
@@ -331,7 +331,7 @@ export default {
         //   light:"#FFBF60FF"
         // }
       }
-      QRCode.toDataURL( process.env.API_FRONT+'show/'+tornaguia.id,opts).then(url => {
+      QRCode.toDataURL( process.env.API_FRONT_LOCAL+'show/'+tornaguia.id,opts).then(url => {
           document.getElementById('myelement').innerHTML = `
 <style>
   .center {
