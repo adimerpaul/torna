@@ -238,6 +238,9 @@ export default {
     }
   },
   mounted() {
+    this.fecha1 = this.initWeek()
+    // this.initWeek()
+    // this.fecha2 = this.finSemana()
     this.tornaguiasGet()
     this.$api.get('empresa').then((response) => {
       response.data.forEach((empresa) => {
@@ -261,27 +264,42 @@ export default {
     });
   },
   methods:{
+    // finSemana(){
+    //   let date = new Date();
+    //   let day = date.getDay();
+    //   let diff = date.getDate() - day + (day == 0 ? -6:1);
+    //   let lunes = new Date(date.setDate(diff));
+    //   return date.formatDate(lunes, 'YYYY-MM-DD')
+    // },
+    initWeek(){
+      let dayWeek = date.formatDate(new Date(), 'E')
+      let dayMonth = date.formatDate(new Date(), 'D')
+      let day = dayMonth - dayWeek + (dayWeek == 0 ? -6:1);
+      return date.formatDate(new Date(new Date().setDate(day)), 'YYYY-MM-DD')
+    },
     printPage(tornaguia){
       console.log(tornaguia)
       const doc = new jsPDF('portrait','cm','letter')
       doc.setFontSize(12)
       doc.setFont('helvetica','bold')
-      doc.text(tornaguia.fecha+'', 2.5, 4.5);
-      doc.text(tornaguia.yacimiento+'', 3.5, 6.5);
-      doc.text(tornaguia.cuadrilla+'', 7, 6.5);
-      doc.text(tornaguia.tranca+'', 4, 7.3);
-      doc.text(tornaguia.empresa.nombre+'', 12, 6.5);
-      doc.text(tornaguia.contratista.nombre+'', 13, 7.3);
-      doc.text(tornaguia.transporte.tipo+'', 2.3, 8.7);
-      doc.text(tornaguia.transporte.marca+'', 6.5, 8.7);
-      doc.text(tornaguia.transporte.color+'', 2.3, 9.5);
-      doc.text(tornaguia.transporte.placa+'', 6.5, 9.5);
-      doc.text(tornaguia.driver.name+'', 4.5, 10.2);
-      doc.text(tornaguia.driver.licencia+'', 2.5, 11);
-      doc.text(tornaguia.tipoMaterial+'', 13.5, 8.7);
-      doc.text(tornaguia.minerales+'', 17, 9.3);
-      doc.text((tornaguia.peso==null?'':tornaguia.peso)+'', 13.5, 9.7);
-      doc.text((tornaguia.sacos==null?'':tornaguia.sacos)+'', 13.5, 10.4);
+      let y=-0.5
+      doc.text(tornaguia.fecha+'', 2.5, 4.5+y);
+      doc.text(tornaguia.yacimiento+'', 3.5, 6.5+y);
+      // doc.text(tornaguia.cuadrilla+'', 7, 6.5+y);
+      doc.text(tornaguia.tranca+'', 4, 7.3+y);
+      doc.text(tornaguia.empresa.nombre+'', 12, 6.5+y);
+      doc.text(tornaguia.contratista.nombre+'', 13, 7.3+y);
+      doc.text(tornaguia.transporte.tipo+'', 2.3, 8.7+y);
+      doc.text(tornaguia.transporte.marca+'', 6.5, 8.7+y);
+      doc.text(tornaguia.transporte.color+'', 2.3, 9.5+y);
+      doc.text(tornaguia.transporte.placa+'', 6.5, 9.5+y);
+      doc.text(tornaguia.driver.name+'', 4.5, 10.2+y);
+      doc.text(tornaguia.driver.licencia+'', 2.5, 11+y);
+      doc.text(tornaguia.tipoMaterial+'', 13.5, 8.7+y);
+      doc.text(tornaguia.minerales+'', 17, 9.3+y);
+      doc.text((tornaguia.peso==null?'':tornaguia.peso)+'', 13.5, 9.7+y);
+      doc.text((tornaguia.sacos==null?'':tornaguia.sacos)+'', 13.5, 10.4+y);
+      doc.text(tornaguia.cuadrilla+'', 13.5, 10.9+y);
       const time = date.formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss')
       var opts = {
         errorCorrectionLevel: 'H',

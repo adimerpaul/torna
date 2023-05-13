@@ -27,6 +27,7 @@ export default boot(({ app, router }) => {
       useCounterStore().isLogged=true
     }).catch((error)=>{
       useCounterStore().isLogged=false
+      router.push('/login')
       api.defaults.headers.common['Authorization'] = ''
       api.post('logout').then((response)=>{
         localStorage.removeItem('tokenTor')
