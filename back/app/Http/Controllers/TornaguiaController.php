@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contratista;
+use App\Models\Empresa;
 use App\Models\Tornaguia;
 use App\Http\Requests\StoreTornaguiaRequest;
 use App\Http\Requests\UpdateTornaguiaRequest;
+use App\Models\Transporte;
 use Illuminate\Http\Request;
 
 class TornaguiaController extends Controller{
@@ -19,6 +22,15 @@ class TornaguiaController extends Controller{
              ->orderBy('id','desc')
              ->get();
     }
+    public function totales(){
+        return response()->json([
+            'totalTornaguias' => Tornaguia::count(),
+            'totalTrasportes' => Transporte::count(),
+            'totalContratistas' => Contratista::count(),
+            'totalEmpresas' => Empresa::count(),
+        ]);
+    }
+
     public function index(){
         return Tornaguia::orderBy('id', 'desc')
             ->with('transporte')

@@ -33,5 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('tornaguiaSearch', [App\Http\Controllers\TornaguiaController::class,'tornaguiaSearch']);
     Route::apiResource('driver', App\Http\Controllers\DriverController::class);
     Route::apiResource('user', App\Http\Controllers\UserController::class);
+//    totales
+    Route::get('totales', [App\Http\Controllers\TornaguiaController::class,'totales']);
     Route::post('attach', [\App\Http\Controllers\PermissionController::class,'attach']);
 });

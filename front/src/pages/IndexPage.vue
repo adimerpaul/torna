@@ -58,18 +58,27 @@ export default {
     }
   },
   created() {
-    this.$api.get('tornaguia').then(res => {
-      this.datos[0].cantidad = res.data.length
+    this.$q.loading.show()
+    this.$api.get('totales').then(res => {
+      this.datos[0].cantidad = res.data.totalTornaguias
+      this.datos[1].cantidad = res.data.totalTrasportes
+      this.datos[2].cantidad = res.data.totalContratistas
+      this.datos[3].cantidad = res.data.totalEmpresas
+    }).finally(() => {
+      this.$q.loading.hide()
     })
-    this.$api.get('transporte').then(res => {
-      this.datos[1].cantidad = res.data.length
-    })
-    this.$api.get('contratista').then(res => {
-      this.datos[2].cantidad = res.data.length
-    })
-    this.$api.get('empresa').then(res => {
-      this.datos[3].cantidad = res.data.length
-    })
+    // this.$api.get('tornaguia').then(res => {
+    //   this.datos[0].cantidad = res.data.length
+    // })
+    // this.$api.get('transporte').then(res => {
+    //   this.datos[1].cantidad = res.data.length
+    // })
+    // this.$api.get('contratista').then(res => {
+    //   this.datos[2].cantidad = res.data.length
+    // })
+    // this.$api.get('empresa').then(res => {
+    //   this.datos[3].cantidad = res.data.length
+    // })
   }
 }
 </script>
