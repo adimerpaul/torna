@@ -282,7 +282,7 @@ export default {
       const doc = new jsPDF('portrait','cm','letter')
       doc.setFontSize(12)
       doc.setFont('helvetica','bold')
-      let y=1
+      let y=0.5
       doc.text(tornaguia.fecha+'', 2.5, 4.5+y);
       doc.text(tornaguia.yacimiento+'', 3.5, 6.5+y);
       // doc.text(tornaguia.cuadrilla+'', 7, 6.5+y);
