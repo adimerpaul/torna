@@ -66,7 +66,13 @@ class TornaguiaController extends Controller{
 //            'user_id'=>'required',
 //            'driver_id'=>'required',
         ]);
-        return Tornaguia::create($request->all());
+        $tornaguia= Tornaguia::create($request->all());
+        return Tornaguia::with('transporte')
+            ->with('empresa')
+            ->with('contratista')
+            ->with('user')
+            ->with('driver')
+            ->find($tornaguia->id);
     }
     public function update(Request $request,$id){
         $tornaguia = Tornaguia::findOrFail($id);

@@ -10,16 +10,16 @@
             <q-input v-if="store.permissions.includes('tornaguia read')"  outlined dense type="date" v-model="fecha2" label="Fecha Hasta"/>
           </div>
           <div class="col-12 col-sm-4 flex flex-center">
-            <q-btn v-if="store.permissions.includes('tornaguia read')" icon="search" color="primary" label="Buscar" @click="buscar" />
+            <q-btn v-if="store.permissions.includes('tornaguia read')" icon="search" color="primary" label="Buscar" @click="buscar" :loading="loading" />
           </div>
         </div>
       </q-card-section>
     </q-card>
-    <q-table :rows="tornaguias" :columns="tornaguiaColums" :filter="search">
+    <q-table :rows="tornaguias" :columns="tornaguiaColums" :filter="search" :rows-per-page-options="[0]" dense >
       <template v-slot:top-right>
         <q-toolbar>
-          <q-btn v-if="store.permissions.includes('tornaguia read')" color="green" :label="$q.screen.lt.md?'':'Descargar excel'" icon="download" @click="tornaguiaDownload" />
-          <q-btn v-if="store.permissions.includes('tornaguia create')" color="primary" :label="$q.screen.lt.md?'':'Crear tornagia'" icon="add_circle_outline" @click="tornaguiaClick" />
+          <q-btn v-if="store.permissions.includes('tornaguia read')" color="green" :label="$q.screen.lt.md?'':'Descargar excel'" icon="download" @click="tornaguiaDownload"  :loading="loading"/>
+          <q-btn v-if="store.permissions.includes('tornaguia create')" color="primary" :label="$q.screen.lt.md?'':'Crear tornagia'" icon="add_circle_outline" @click="tornaguiaClick" :loading="loading" />
           <q-input v-model="search"  outlined  dense placeholder="Buscar..." />
         </q-toolbar>
       </template>
@@ -30,7 +30,7 @@
       </template>
       <template v-slot:body-cell-option="props">
         <q-td :props="props" auto-width >
-          <q-btn-dropdown color="primary" label="Opciones" no-caps>
+          <q-btn-dropdown color="primary" label="Opciones" no-caps dense size="10px">
             <q-list>
               <q-item v-if="store.permissions.includes('tornaguia update')" clickable v-close-popup @click="ver(props.row)" >
                 <q-item-section avatar>
@@ -82,12 +82,15 @@
         <q-card-section class="q-pt-none">
           <q-form @submit.prevent="tornaguiaCreate">
             <q-card>
-              <q-card-section>
+              <q-card-section class="q-pa-xs">
                 <div class="row">
-                  <div class="col-12 col-sm-6">
+                  <div class="col-12 col-sm-4">
                     <q-input  v-model="tornaguia.fecha" type="date" :label="`Fecha: ${tornaguia.fecha} `" outlined dense />
                   </div>
-                  <div class="col-12 col-sm-6">
+                  <div class="col-12 col-sm-4">
+                    <q-input  v-model="tornaguia.hora" type="time" :label="`Hora: ${tornaguia.hora} `" outlined dense />
+                  </div>
+                  <div class="col-12 col-sm-4">
                     <q-input  v-model="tornaguia.numero" type="number" label="Número Asignado:" outlined dense :rules="[val => val > 0 || 'Debe ser mayor a 0']" />
                   </div>
                 </div>
@@ -95,7 +98,7 @@
               <q-card-section class="bg-primary text-white q-pa-xs">
                 <div class="text-subtitle2">PROPIETARIO DEL MINERAL</div>
               </q-card-section>
-              <q-card-section>
+              <q-card-section class="q-pa-xs">
                 <div class="row">
                   <div class="col-12 col-sm-6">
                     <q-select  v-model="tornaguia.empresas" :rules="[ (val, rules) => !!val || 'Porfavor registrar dato' ]" required :options="empresas" label="Empresa Destiono:" outlined dense />
@@ -108,7 +111,7 @@
               <q-card-section class="bg-primary text-white q-pa-xs">
                 <div class="text-subtitle2">PROCEDENCIA</div>
               </q-card-section>
-              <q-card-section>
+              <q-card-section class="q-pa-xs">
                 <div class="row">
                   <div class="col-12 col-sm-4">
                     <q-input  v-model="tornaguia.yacimiento" label="Yacimiento:" outlined dense :rules="[val=>!!val||'Porfavor registrar dato']" />
@@ -124,7 +127,7 @@
               <q-card-section class="bg-primary text-white q-pa-xs">
                 <div class="text-subtitle2">MEDIO DE TRANSPORTE</div>
               </q-card-section>
-              <q-card-section>
+              <q-card-section class="q-pa-xs">
                 <div class="row">
                   <div class="col-12 col-sm-6">
                     <q-select  v-model="tornaguia.transportes" :rules="[val=>!!val||'Porfavor registrar dato']" required :options="transportes" label="Transporte:" outlined dense />
@@ -137,7 +140,7 @@
               <q-card-section class="bg-primary text-white q-pa-xs">
                 <div class="text-subtitle2">TIPO DE MATERIAL</div>
               </q-card-section>
-              <q-card-section>
+              <q-card-section class="q-pa-xs">
                 <div class="row">
                   <div class="col-12 col-sm-6">
                     <div class="text-bold">Tipo de Material:</div>
@@ -194,6 +197,7 @@ import { Printd } from 'printd'
 import QRCode from 'qrcode'
 import xlsx from "json-as-xlsx"
 import { jsPDF } from 'jspdf'
+import moment from "moment";
 
 export default {
   name: `Tornaguia`,
@@ -215,8 +219,8 @@ export default {
         fecha:date.formatDate(new Date(), 'YYYY-MM-DD'),
         mineralesSel:[],
       },
-      fecha1:date.formatDate(new Date(), 'YYYY-MM-DD'),
-      fecha2:date.formatDate(new Date(), 'YYYY-MM-DD'),
+      fecha1: moment().startOf('week').format('YYYY-MM-DD'),
+      fecha2: moment().endOf('week').format('YYYY-MM-DD'),
       loading: false,
       tornaguiaCrear: true,
       empresas:[],
@@ -238,7 +242,7 @@ export default {
     }
   },
   mounted() {
-    this.fecha1 = this.initWeek()
+    // this.fecha1 = this.initWeek()
     // this.initWeek()
     // this.fecha2 = this.finSemana()
     this.tornaguiasGet()
@@ -549,7 +553,8 @@ export default {
         })
     },
     tornaguiasGet(){
-      this.$q.loading.show()
+      // this.$q.loading.show()
+      this.loading = true
       this.$api.post('tornaguiaSearch',{
         fechaDesde: this.fecha1,
         fechaHasta: this.fecha2,
@@ -559,8 +564,8 @@ export default {
           // d.fecha= date.formatDate(d.created_at, 'YYYY-MM-DD HH:mm:ss')
           this.tornaguias.push(d)
         })
-
-        this.$q.loading.hide()
+        this.loading = false
+        // this.$q.loading.hide()
       })
     },
     buscar(){
@@ -605,6 +610,7 @@ export default {
       this.tornaguia={
         tipoMaterial: 'Mineral',
         fecha:date.formatDate(new Date(), 'YYYY-MM-DD'),
+        hora:date.formatDate(new Date(), 'HH:mm'),
         mineralesSel:[],
       }
       this.showAddTornaguiaDialog = true;
@@ -624,7 +630,8 @@ export default {
         })
         this.tornaguia.minerales=materiales
         this.$api.post('tornaguia', this.tornaguia).then(response => {
-          this.tornaguiasGet()
+          // this.tornaguiasGet()
+          this.tornaguias.unshift(response.data)
           this.showAddTornaguiaDialog = false
           this.tornaguia = {
             fecha:date.formatDate(new Date(), 'YYYY-MM-DD'),
@@ -716,7 +723,8 @@ export default {
         ok: 'Si',
         cancel: 'No'
       }).onOk(() => {
-        this.$q.loading.show()
+        // this.$q.loading.show()
+        this.loading = true
         this.$api.delete('tornaguia/'+tornaguia.id).then(response => {
           this.tornaguiasGet()
         })
