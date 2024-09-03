@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-table :rows="transportes" :columns="transporteColums" :filter="search">
+    <q-table :rows="transportes" :columns="transporteColums" :filter="search" :rows-per-page-options="[0]" dense wrap-cells>
       <template v-slot:top-right>
         <q-toolbar>
           <q-btn v-if="store.permissions.includes('transporte create')" flat icon="add_circle_outline" @click="showAddUserDialog = true;transporteCrear=true" />
@@ -14,8 +14,10 @@
       </template>
       <template v-slot:body-cell-option="props">
         <q-td :props="props" auto-width >
-          <q-btn v-if="store.permissions.includes('transporte update')" flat dense icon="o_edit" @click="transporteEdit(props.row)" />
-          <q-btn v-if="store.permissions.includes('transporte delete')" flat dense icon="o_delete" @click="transporteDelete(props.row)" />
+          <q-btn-group flat>
+            <q-btn v-if="store.permissions.includes('transporte update')" flat dense icon="o_edit" @click="transporteEdit(props.row)" size="10px" />
+            <q-btn v-if="store.permissions.includes('transporte delete')" flat dense icon="o_delete" @click="transporteDelete(props.row)" size="10px" />
+          </q-btn-group>
         </q-td>
       </template>
     </q-table>
@@ -38,7 +40,7 @@
     <q-dialog v-model="showUpdateUserDialog" >
       <q-card style="width: 700px;max-width: 85vw">
         <q-card-section class="row items-center">
-          <div class="text-h6">Agregar Transporte</div>
+          <div class="text-h6">Modificar Transporte</div>
         </q-card-section>
         <q-card-section>
           <q-form @submit.prevent="transporteUpdate">
@@ -46,6 +48,8 @@
             <q-input v-model="transporte.marca" hint="" required outlined label="Marca" />
             <q-input v-model="transporte.placa" hint="" required outlined label="Placa" />
             <q-input v-model="transporte.color" hint="" required outlined label="Color" />
+<!--            estado Activo Inactivo-->
+            <q-select v-model="transporte.estado" :options="['Activo','Inactivo']" hint="" required outlined label="Estado" />
             <q-btn :loading="loading" type="submit" color="primary" icon="add_circle_outline" label="Guardar" class="full-width" />
           </q-form>
         </q-card-section>

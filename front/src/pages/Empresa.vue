@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-table :rows="empresas" :columns="empresaColums" :filter="search">
+    <q-table :rows="empresas" :columns="empresaColums" :filter="search" :rows-per-page-options="[0]" dense wrap-cells>
       <template v-slot:top-right>
         <q-toolbar>
           <q-btn v-if="store.permissions.includes('empresa create')" flat icon="add_circle_outline" @click="showAddUserDialog = true;empresaCrear=true" />
@@ -14,8 +14,10 @@
       </template>
       <template v-slot:body-cell-option="props">
         <q-td :props="props" auto-width >
-          <q-btn v-if="store.permissions.includes('empresa update')" flat dense icon="o_edit" @click="empresaEdit(props.row)" />
-          <q-btn v-if="store.permissions.includes('empresa delete')" flat dense icon="o_delete" @click="empresaDelete(props.row)" />
+          <q-btn-group flat>
+            <q-btn v-if="store.permissions.includes('empresa update')" flat dense icon="o_edit" @click="empresaEdit(props.row)" size="10px" />
+            <q-btn v-if="store.permissions.includes('empresa delete')" flat dense icon="o_delete" @click="empresaDelete(props.row)" size="10px" />
+          </q-btn-group>
         </q-td>
       </template>
     </q-table>
@@ -46,6 +48,7 @@
             <q-select v-model="empresa.ciudad" hint="" required outlined label="Ciudad" :options="['ORURO','LA PAZ','COCHABAMBA','SANTA CRUZ','POTOSI','TARIJA','CHUQUISACA','BENI','PANDO']" />
             <q-input v-model="empresa.telefono" hint="" required outlined label="Celular" />
             <q-input v-model="empresa.nit" hint="" required outlined label="NIT" />
+            <q-select v-model="empresa.estado" :options="['Activo','Inactivo']" hint="" required outlined label="Estado" />
             <q-btn :loading="loading" type="submit" color="primary" icon="add_circle_outline" label="Guardar" class="full-width" />
           </q-form>
         </q-card-section>

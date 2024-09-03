@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-table :rows="contratistas" :columns="contratistaColums" :filter="search">
+    <q-table :rows="contratistas" :columns="contratistaColums" :filter="search" :rows-per-page-options="[0]" dense wrap-cells>
       <template v-slot:top-right>
         <q-toolbar>
           <q-btn v-if="store.permissions.includes('contratista create')" flat icon="add_circle_outline" @click="showAddUserDialog = true;contratistaCrear=true" />
@@ -14,8 +14,10 @@
       </template>
       <template v-slot:body-cell-option="props">
         <q-td :props="props" auto-width >
-          <q-btn v-if="store.permissions.includes('contratista update')" flat dense icon="o_edit" @click="contratistaEdit(props.row)" />
-          <q-btn v-if="store.permissions.includes('contratista delete')" flat dense icon="o_delete" @click="contratistaDelete(props.row)" />
+          <q-btn-group flat>
+            <q-btn v-if="store.permissions.includes('contratista update')" flat dense icon="o_edit" @click="contratistaEdit(props.row)" size="10px"/>
+            <q-btn v-if="store.permissions.includes('contratista delete')" flat dense icon="o_delete" @click="contratistaDelete(props.row)" size="10px"/>
+          </q-btn-group>
         </q-td>
       </template>
     </q-table>
@@ -48,6 +50,8 @@
             <q-input v-model="contratista.celular" hint="" required outlined label="Celular" />
             <q-input v-model="contratista.direccion" hint="" required outlined label="Direccion" />
             <q-input v-model="contratista.ci" hint="" required outlined label="CI" />
+<!--            estadp Activo Inactivo-->
+            <q-select v-model="contratista.estado" :options="['Activo','Inactivo']" hint="" required outlined label="Estado" />
             <q-btn :loading="loading" type="submit" color="primary" icon="add_circle_outline" label="Guardar" class="full-width" />
           </q-form>
         </q-card-section>

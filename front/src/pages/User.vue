@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-table :rows="users" :columns="userColums" :filter="search">
+    <q-table :rows="users" :columns="userColums" :filter="search" :rows-per-page-options="[0]" dense wrap-cells>
       <template v-slot:top-right>
         <q-toolbar>
           <q-btn v-if="store.permissions.includes('user create')" flat icon="add_circle_outline" @click="showAddUserDialog = true;userCrear=true" />
@@ -224,7 +224,7 @@ export default {
         message: 'Ingrese la nueva contraseña',
         prompt: {
           model: '',
-          type: 'password'
+          type: ''
         },
         cancel: true,
         persistent: true

@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-table :rows="drivers" :columns="driverColums" :filter="search">
+    <q-table :rows="drivers" :columns="driverColums" :filter="search" :rows-per-page-options="[0]" dense wrap-cells>
       <template v-slot:top-right>
         <q-toolbar>
           <q-btn v-if="store.permissions.includes('conductor create')" flat icon="add_circle_outline" @click="showAddDriverDialog = true;driverCrear=true" />
@@ -14,11 +14,14 @@
       </template>
       <template v-slot:body-cell-option="props">
         <q-td :props="props" auto-width >
-          <q-btn v-if="store.permissions.includes('conductor update')" flat dense icon="o_edit" @click="driverEdit(props.row)" />
-          <q-btn v-if="store.permissions.includes('conductor delete')" flat dense icon="o_delete" @click="driverDelete(props.row)" />
+          <q-btn-group flat>
+            <q-btn v-if="store.permissions.includes('conductor update')" flat dense icon="o_edit" @click="driverEdit(props.row)" size="10px" />
+            <q-btn v-if="store.permissions.includes('conductor delete')" flat dense icon="o_delete" @click="driverDelete(props.row)" size="10px" />
+          </q-btn-group>
         </q-td>
       </template>
     </q-table>
+<!--    <pre>{{drivers}}</pre>-->
     <q-dialog v-model="showAddDriverDialog" >
       <q-card style="width: 700px;max-width: 85vw">
         <q-card-section class="row items-center">
@@ -48,6 +51,8 @@
 <!--            <q-input v-model="driver.telefono" hint="" required outlined label="Telefono" />-->
             <q-input v-model="driver.celular" hint="" required outlined label="Celular" />
             <q-input v-model="driver.licencia" hint="" required outlined label="Licencia" />
+<!--            estado Activo Inactivo-->
+            <q-select v-model="driver.estado" :options="['Activo','Inactivo']" hint="" required outlined label="Estado" />
             <q-btn :loading="loading" type="submit" color="primary" icon="add_circle_outline" label="Guardar" class="full-width" />
           </q-form>
         </q-card-section>
@@ -78,9 +83,10 @@ export default {
       driverCrear: true,
       driverColums:[
         {name: 'option', field: 'option', label: 'Opciones', align: 'left', sortable: true},
+        {name: 'estado', field: 'estado', label: 'Estado', align: 'left', sortable: true},
         {name: 'name', field: 'name', label: 'Nombre', align: 'left', sortable: true},
         {name: 'contacto', field: 'contacto', label: 'Contacto', align: 'left', sortable: true},
-        {name: 'telefono', field: 'telefono', label: 'Telefono', align: 'left', sortable: true},
+        // {name: 'telefono', field: 'telefono', label: 'Telefono', align: 'left', sortable: true},
         {name: 'celular', field: 'celular', label: 'Celular', align: 'left', sortable: true},
         {name: 'licencia', field: 'licencia', label: 'Licencia', align: 'left', sortable: true},
       ]
