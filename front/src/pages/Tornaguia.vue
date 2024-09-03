@@ -230,7 +230,7 @@ export default {
       tornaguiaColums:[
         {name: 'option', field: 'option', label: 'Opciones', align: 'left', sortable: true},
         {name: 'numero', field: 'numero', label: 'No.', align: 'left', sortable: true},
-        {name: 'fecha', field: 'fecha', label: 'Fecha', align: 'left', sortable: true},
+        {name: 'fecha', field: row=>row.fecha+' '+(row.hora?row.hora.substring(0,5):''), label: 'Fecha', align: 'left', sortable: true},
         {name: 'empresa', label: 'Empresa destino', field: row=>row.empresa.nombre, align: 'left', sortable: true},
         {name: 'contratista', label: 'Contratista', field: row=>row.contratista.nombre, align: 'left', sortable: true},
         {name: 'minerales', label: 'Minerales', field: 'minerales', align: 'left', sortable: true},
@@ -287,7 +287,7 @@ export default {
       doc.setFontSize(12)
       doc.setFont('helvetica','bold')
       let y=0.5
-      doc.text(tornaguia.fecha+'', 2.5, 4.5+y);
+      doc.text(tornaguia.fecha+' '+(tornaguia.hora?tornaguia.hora.substring(0,5):''), 2.5, 4.5+y);
       doc.text(tornaguia.yacimiento+'', 3.5, 6.5+y);
       // doc.text(tornaguia.cuadrilla+'', 7, 6.5+y);
       doc.text(tornaguia.tranca+'', 4, 7.3+y);
