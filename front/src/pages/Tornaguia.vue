@@ -246,25 +246,31 @@ export default {
     // this.initWeek()
     // this.fecha2 = this.finSemana()
     this.tornaguiasGet()
-    this.$api.get('empresa').then((response) => {
-      response.data.forEach((empresa) => {
-        this.empresas.push({label:empresa.nombre, value:empresa.id})
-      })
-    });
-    this.$api.get('contratista').then((response) => {
-      response.data.forEach((contratista) => {
-        this.contratistas.push({label:contratista.nombre, value:contratista.id})
-      })
-    });
-    this.$api.get('transporte').then((response) => {
-      response.data.forEach((transporte) => {
-        this.transportes.push({label:transporte.placa, value:transporte.id})
-      })
-    });
-    this.$api.get('driver').then((response) => {
-      response.data.forEach((drive) => {
-        this.drivers.push({label:drive.name, value:drive.id})
-      })
+    // this.$api.get('empresa').then((response) => {
+    //   response.data.forEach((empresa) => {
+    //     this.empresas.push({label:empresa.nombre, value:empresa.id})
+    //   })
+    // });
+    // this.$api.get('contratista').then((response) => {
+    //   response.data.forEach((contratista) => {
+    //     this.contratistas.push({label:contratista.nombre, value:contratista.id})
+    //   })
+    // });
+    // this.$api.get('transporte').then((response) => {
+    //   response.data.forEach((transporte) => {
+    //     this.transportes.push({label:transporte.placa, value:transporte.id})
+    //   })
+    // });
+    // this.$api.get('driver').then((response) => {
+    //   response.data.forEach((drive) => {
+    //     this.drivers.push({label:drive.name, value:drive.id})
+    //   })
+    // });
+    this.$api.get('datos').then((response) => {
+      this.empresas = response.data.empresas.map(empresa=>({label:empresa.nombre, value:empresa.id}))
+      this.contratistas = response.data.contratistas.map(contratista=>({label:contratista.nombre, value:contratista.id}))
+      this.transportes = response.data.transportes.map(transporte=>({label:transporte.placa, value:transporte.id}))
+      this.drivers = response.data.drivers.map(driver=>({label:driver.name, value:driver.id}))
     });
   },
   methods:{

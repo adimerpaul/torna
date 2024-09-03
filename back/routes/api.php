@@ -36,4 +36,6 @@ Route::middleware('auth:sanctum')->group(function () {
 //    totales
     Route::get('totales', [App\Http\Controllers\TornaguiaController::class,'totales']);
     Route::post('attach', [\App\Http\Controllers\PermissionController::class,'attach']);
+//    datos get
+    Route::get('datos', [\App\Http\Controllers\DatosController::class,'datos']);
 });
