@@ -38,4 +38,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('attach', [\App\Http\Controllers\PermissionController::class,'attach']);
 //    datos get
     Route::get('datos', [\App\Http\Controllers\DatosController::class,'datos']);
+//    tornaguiasGet
+    Route::get('tornaguiasGet', [\App\Http\Controllers\TornaguiaController::class,'tornaguiasGet']);
 });

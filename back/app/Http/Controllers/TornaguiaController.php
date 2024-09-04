@@ -11,6 +11,17 @@ use App\Models\Transporte;
 use Illuminate\Http\Request;
 
 class TornaguiaController extends Controller{
+    function tornaguiasGet(Request $request){
+        $fechaIni = $request->fechaIni;
+        $fechaFin = $request->fechaFin;
+        $tornaguias = Tornaguia::selectRaw('DATE(fecha) as fecha, count(*) as total')
+            ->where('fecha', '>=', $fechaIni)
+            ->where('fecha', '<=', $fechaFin)
+            ->groupBy('fecha')
+            ->orderBy('fecha')
+            ->get();
+        return $tornaguias;
+    }
      public function tornaguiaSearch(Request $request){
          return Tornaguia::where('fecha', '>=', $request->fechaDesde)
              ->where('fecha', '<=', $request->fechaHasta)
