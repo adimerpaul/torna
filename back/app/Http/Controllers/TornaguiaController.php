@@ -77,6 +77,7 @@ class TornaguiaController extends Controller{
 //            'user_id'=>'required',
 //            'driver_id'=>'required',
         ]);
+        $request->merge(['hora' => date('H:i:s', strtotime($request->hora))]);
         $tornaguia= Tornaguia::create($request->all());
         return Tornaguia::with('transporte')
             ->with('empresa')

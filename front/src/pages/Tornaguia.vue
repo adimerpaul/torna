@@ -84,13 +84,13 @@
             <q-card>
               <q-card-section class="q-pa-xs">
                 <div class="row">
-                  <div class="col-12 col-sm-4">
+                  <div class="col-12 col-sm-6">
                     <q-input  v-model="tornaguia.fecha" type="date" :label="`Fecha: ${tornaguia.fecha} `" outlined dense />
                   </div>
-                  <div class="col-12 col-sm-4">
-                    <q-input  v-model="tornaguia.hora" type="time" :label="`Hora: ${tornaguia.hora} `" outlined dense />
-                  </div>
-                  <div class="col-12 col-sm-4">
+<!--                  <div class="col-12 col-sm-4">-->
+<!--                    <q-input  v-model="tornaguia.hora" type="time" :label="`Hora: ${tornaguia.hora} `" outlined dense />-->
+<!--                  </div>-->
+                  <div class="col-12 col-sm-6">
                     <q-input  v-model="tornaguia.numero" type="number" label="Número Asignado:" outlined dense :rules="[val => val > 0 || 'Debe ser mayor a 0']" />
                   </div>
                 </div>
@@ -584,7 +584,7 @@ export default {
             // { label: "User", value: "user" }, // Top level data
             // { label: "Age", value: (row) => row.age + " years" }, // Custom format
             // { label: "Phone", value: (row) => (row.more ? row.more.phone || "" : "") }, // Run functions
-            {label:"fecha",value:"fecha"},
+            {label:"fecha",value:(row)=>row.fecha+' '+(row.hora?row.hora.substring(0,5):'')},
             {label:"numero",value:"numero"},
             {label:"yacimiento",value:"yacimiento"},
             {label:"tranca",value:"tranca"},
