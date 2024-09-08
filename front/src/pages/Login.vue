@@ -5,8 +5,11 @@
         <div class="row">
           <div class="col-1 col-sm-4"></div>
           <div class="col-10 col-sm-4">
-            <div class="text-subtitle1 text-center q-pt-xs text-grey">CUENTA</div>
-            <div class="text-h2 text-center q-pa-xs text-black text-bold">Tu Cuenta</div>
+            <div class="text-center q-pa-xs">
+              <q-img src="logosis.png" width="100px" />
+            </div>
+            <div class="text-subtitle1 text-center q-pt-xs text-grey">Ingresa</div>
+            <div class="text-h6 text-center q-pa-xs text-black text-bold">COOPERATIVA MINERA POOPO R.L.</div>
             <q-card flat bordered>
               <q-card-section >
                 <q-form class="q-pa-lg" @submit.prevent="login">
